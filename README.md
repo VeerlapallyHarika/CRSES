@@ -49,8 +49,8 @@ This project focuses on building a **smart and secure energy monitoring system**
 ### 1️⃣ Clone the repository
 
 ```
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/VeerlapallyHarika/CRSES.git
+cd CRSES
 ```
 
 ### 2️⃣ Install dependencies
