@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Cyber-Resilient Smart Energy System{% endblock %}
+
+{% block content %}
+<div class="card card--center">
+  <h2 class="card__title">Create Account</h2>
+  <form action="" method="post" class="form">
+    <label class="form__label">
+      Username
+      <input class="form__input" type="text" name="username" required autofocus />
+    </label>
+
+    <label class="form__label">
+      Password
+      <input class="form__input" type="password" name="password" required />
+    </label>
+
+    <button class="btn btn--primary" type="submit">Register</button>
+
+    <p class="form__hint">
+      Already have an account? <a href="{{ url_for('login') }}">Login</a>
+    </p>
+  </form>
+</div>
+{% endblock %}

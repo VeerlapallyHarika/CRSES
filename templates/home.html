@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Cyber-Resilient Smart Energy System{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1 class="hero__title">Welcome to Cyber-Resilient Smart Energy System</h1>
+  <p class="hero__subtitle">
+    Monitor energy usage, spot faults, and detect cyber threats in real time.
+  </p>
+  <div class="hero__actions">
+    {% if g.user %}
+    <a class="btn btn--primary" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+    {% else %}
+    <a class="btn btn--primary" href="{{ url_for('register') }}">Get Started</a>
+    <a class="btn btn--secondary" href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Cyber-Resilient Smart Energy System{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <header class="dashboard__header">
+    <div>
+      <h1 class="dashboard__title">Welcome, {{ g.user.username }}.</h1>
+      <p class="dashboard__subtitle">Your energy snapshot and alert center.</p>
+    </div>
+  </header>
+
+  <section class="dashboard__domains">
+    <div class="card card--stat">
+      <h3 class="card__title">Smart Grid Cybersecurity</h3>
+      <p class="card__desc">Detect suspicious spikes in usage and flag potential cyber attacks.</p>
+    </div>
+    <div class="card card--stat">
+      <h3 class="card__title">Fault & Predictive Maintenance</h3>
+      <p class="card__desc">Spot abnormal consumption and identify devices that may be failing.</p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="card card--stat">
+      <h3 class="card__title">Total Usage</h3>
+      <p class="card__value">{{ "%.2f"|format(total_usage) }} units</p>
+    </div>
+
+    <div class="card card--stat">
+      <h3 class="card__title">Devices Tracked</h3>
+      <p class="card__value">{{ device_totals|length }}</p>
+    </div>
+
+    <div class="card card--stat">
+      <h3 class="card__title">Alerts</h3>
+      <p class="card__value">{{ alerts|length }}</p>
+    </div>
+  </section>
+
+  <section class="alerts">
+    <h2 class="section__title">Latest Alerts</h2>
+    <p class="muted">
+      Smart Grid Cybersecurity and Fault Detection alerts appear here as soon as they are detected.
+    </p>
+
+    {% if alerts %}
+    <div class="alerts__summary">
+      <div class="alert-summary__item">
+        <span class="alert-summary__label">Total Alerts</span>
+        <span class="alert-summary__value">{{ alerts|length }}</span>
+      </div>
+      <div class="alert-summary__item">
+        <span class="alert-summary__label">Cyber Threats</span>
+        <span class="alert-summary__value">
+          {{ alerts|selectattr('type', 'equalto', 'cyber_threat')|list|length }}
+        </span>
+      </div>
+      <div class="alert-summary__item">
+        <span class="alert-summary__label">Faults</span>
+        <span class="alert-summary__value">
+          {{ alerts|selectattr('type', 'equalto', 'fault')|list|length }}
+        </span>
+      </div>
+    </div>
+
+    <div class="alerts__grid">
+      {% for alert in latest_alerts %}
+      <div class="alert alert--{{ alert.type }}">
+        <div class="alert__emoji">
+          {% if alert.type == 'cyber_threat' %}🚨{% else %}⚠️{% endif %}
+        </div>
+        <div>
+          <div class="alert__message">{{ alert.message }}</div>
+          <div class="alert__meta">
+            <strong>{{ alert.device }}</strong> • {{ alert.units }} units • {{ alert.timestamp }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if alerts|length > 5 %}
+    <p class="muted">Showing latest 5 alerts. Older alerts are still recorded.</p>
+    {% endif %}
+    {% else %}
+    <p class="muted">No alerts right now. Your system looks stable.</p>
+    {% endif %}
+  </section>
+
+  <section class="grid">
+    <div class="card card--large">
+      <h2 class="card__title">Usage Trend</h2>
+      <canvas id="usageChart" width="400" height="220"></canvas>
+    </div>
+
+    <div class="card card--large">
+      <h2 class="card__title">Add Energy Record</h2>
+      <form class="form" method="post">
+        <label class="form__label">
+          Device name
+          <input class="form__input" type="text" name="device_name" required autofocus />
+        </label>
+
+        <label class="form__label">
+          Units consumed
+          <input class="form__input" type="number" step="0.01" name="units" required />
+        </label>
+
+        <label class="form__label">
+          Time (optional)
+          <input class="form__input" type="datetime-local" name="timestamp" />
+        </label>
+
+        <button class="btn btn--primary" type="submit">Add record</button>
+      </form>
+
+      {% if suggestions %}
+      <div class="suggestions">
+        <h3 class="suggestions__title">Optimization Tips</h3>
+        <ul class="suggestions__list">
+          {% for suggestion in suggestions %}
+          <li>{{ suggestion }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="table-section">
+    <h2 class="section__title">Energy History</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Device</th>
+            <th>Units</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in entries %}
+          <tr>
+            <td>{{ entry.timestamp }}</td>
+            <td>{{ entry.device_name }}</td>
+            <td>{{ "%.2f"|format(entry.units) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
+
+<script>
+  window.dashboardData = {
+    labels: {{ chart_labels|tojson }},
+    values: {{ chart_data|tojson }},
+  };
+</script>
+{% endblock %}
