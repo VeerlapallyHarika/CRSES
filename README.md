@@ -90,11 +90,3 @@ http://127.0.0.1:5000/
 <img width="1882" height="850" alt="Screenshot 2026-03-18 111638" src="https://github.com/user-attachments/assets/b8629115-d838-4494-880c-70366a3a9eac" />
 <img width="1882" height="859" alt="Screenshot 2026-03-18 111654" src="https://github.com/user-attachments/assets/107c106a-eba6-4bb8-a547-c17f7b41e9d9" />
 
-
-
-
-
-## 📜 License
-
-This project is for educational and hackathon purposes.
->>>>>>> 2d81d55cb3b52facd5a067914c9d22e7a99cf29a
